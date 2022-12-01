@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import "./Card.css";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import SwipeIcon from "@mui/icons-material/Swipe";
 
 export default function Card() {
   const [myData, setMyData] = useState([]);
@@ -47,16 +48,27 @@ export default function Card() {
     setContainers(true);
   };
 
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      submitHandler(e);
+    }
+  });
   // console.log(myData);
 
   const [celsius, setCelsius] = useState(true);
 
-  const switchTempUnit = () => {
-    setCelsius(!celsius);
-    const btn = document.querySelectorAll(".switchTempUnit");
-    btn.forEach((btn) => {
-      btn.classList.toggle("active");
-    });
+  const switchTempUnitFarenhite = () => {
+    setCelsius(false);
+    document.querySelector(".switchTempUnitFarenhite").classList.add("active");
+    document.querySelector(".switchTempUnitCelsius").classList.remove("active");
+  };
+
+  const switchTempUnitCelsius = () => {
+    setCelsius(true);
+    document.querySelector(".switchTempUnitCelsius").classList.add("active");
+    document
+      .querySelector(".switchTempUnitFarenhite")
+      .classList.remove("active");
   };
 
   // window.addEventListener("load", () => {
@@ -125,12 +137,15 @@ export default function Card() {
                 )}
                 <div>
                   <button
-                    onClick={switchTempUnit}
-                    className="switchTempUnit active"
+                    onClick={switchTempUnitCelsius}
+                    className="switchTempUnitCelsius active"
                   >
                     &#176;C
                   </button>
-                  <button onClick={switchTempUnit} className=" switchTempUnit">
+                  <button
+                    onClick={switchTempUnitFarenhite}
+                    className="switchTempUnitFarenhite"
+                  >
                     &#176;F
                   </button>
                 </div>
@@ -354,7 +369,12 @@ export default function Card() {
                         &#176;
                       </p>
                     )}
-                    <div className="day-quarter-img-div">
+                    <div
+                      className="day-quarter-img-div"
+                      title={
+                        myData?.forecast?.forecastday[0].hour[5].condition?.text
+                      }
+                    >
                       <img
                         src={
                           myData?.forecast?.forecastday[0].hour[5]?.condition
@@ -377,7 +397,7 @@ export default function Card() {
                       </p>
                     )}
                   </div>
-                
+
                   <div className="day-quarter">
                     <p className="day-quarter-heading">Afternoon</p>
                     {myData?.forecast && (
@@ -388,7 +408,13 @@ export default function Card() {
                         &#176;
                       </p>
                     )}
-                    <div className="day-quarter-img-div">
+                    <div
+                      className="day-quarter-img-div"
+                      title={
+                        myData?.forecast?.forecastday[0].hour[13].condition
+                          ?.text
+                      }
+                    >
                       <img
                         src={
                           myData?.forecast?.forecastday[0].hour[13]?.condition
@@ -411,7 +437,6 @@ export default function Card() {
                       </p>
                     )}
                   </div>
-               
                 </div>
                 <div className="row">
                   <div className="day-quarter">
@@ -424,7 +449,13 @@ export default function Card() {
                         &#176;
                       </p>
                     )}
-                    <div className="day-quarter-img-div">
+                    <div
+                      className="day-quarter-img-div"
+                      title={
+                        myData?.forecast?.forecastday[0].hour[17].condition
+                          ?.text
+                      }
+                    >
                       <img
                         src={
                           myData?.forecast?.forecastday[0].hour[17]?.condition
@@ -447,7 +478,7 @@ export default function Card() {
                       </p>
                     )}
                   </div>
-             
+
                   <div className="day-quarter">
                     <p className="day-quarter-heading">Overnight</p>
                     {myData?.forecast && (
@@ -458,7 +489,12 @@ export default function Card() {
                         &#176;
                       </p>
                     )}
-                    <div className="day-quarter-img-div">
+                    <div
+                      className="day-quarter-img-div"
+                      title={
+                        myData?.forecast?.forecastday[0].hour[0].condition?.text
+                      }
+                    >
                       <img
                         src={
                           myData?.forecast?.forecastday[0].hour[0]?.condition
@@ -488,7 +524,7 @@ export default function Card() {
             <div className="container-four">
               {myData?.location && (
                 <p className="container-heading">
-                  Hourly forecast for{" "}
+                  Today's Hourly Forecast for{" "}
                   <span className="location">{myData?.location?.name}</span>,
                   <span>&nbsp;{myData?.location?.region}&nbsp;</span>
                   <small>
@@ -499,8 +535,14 @@ export default function Card() {
                         <span>(temp in &#176;F)</span>
                       )}
                     </small>
-                  </small>
+                  </small>{" "}
                 </p>
+              )}
+              {myData?.location && (
+                <SwipeIcon
+                  className="swipeIcon"
+                  sx={{ fontSize: 25 }}
+                ></SwipeIcon>
               )}
               <div className="hourly-forecast-div">
                 {myData?.forecast?.forecastday[0]?.hour?.map((hour, index) => {
@@ -510,7 +552,11 @@ export default function Card() {
                         {celsius ? hour.temp_c : hour.temp_f}&#176;
                       </p>
                       <div>
-                        <img src={hour.condition?.icon} alt="" />
+                        <img
+                          src={hour.condition?.icon}
+                          className="hourly-forecast-img"
+                          alt=""
+                        />
                       </div>
                       <p>{hour.condition?.text}</p>
                       <div style={{ display: "flex" }}>
