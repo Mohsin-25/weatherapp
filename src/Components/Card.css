@@ -363,18 +363,27 @@
   /*  */
   .day-quarter {
     padding: 10px 50px;
-    gap: 5px;
+    gap: 10px;
+    margin-top: 10px;
   }
 }
 @media screen and (max-width: 430px) {
   .day-quarter {
     padding: 10px 40px;
-    gap: 5px;
   }
 }
 @media screen and (max-width: 380px) {
   .day-quarter {
     padding: 10px 30px;
     gap: 5px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .input-div {
+    display: flex;
+    margin: 20px 10px;
+  }
+  .input-div input {
+    width: 100%;
   }
 }
